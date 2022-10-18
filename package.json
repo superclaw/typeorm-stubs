@@ -2,7 +2,7 @@
   "name": "typeorm-stubs",
   "version": "1.1.0",
   "description": "Stubs generator for Typeorm entities",
-  "main": "src/index.ts",
+  "main": "index.js",
   "scripts": {
     "build": "tsc && copyfiles package.json README.md CHANGELOG.md build",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix"
