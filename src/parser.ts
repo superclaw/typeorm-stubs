@@ -5,7 +5,7 @@ import { RelationMetadataArgs } from 'typeorm/metadata-args/RelationMetadataArgs
 import { isNumber, isConstructor, isFunction, isNotNull, isObject, isString } from './type-guards';
 import { Singleton } from './singleton';
 import { Generator } from './generator';
-import { ColumnValue, ObjectType } from './interfaces';
+import { ColumnValue, ObjectType, StubOptions } from './interfaces';
 import { ARRAY_RELATION_TYPE } from './constants';
 import { getParentClass } from './utils';
 
@@ -19,9 +19,13 @@ export class Parser extends Singleton {
     entity: ObjectType<T>,
     metadataStorage: MetadataArgsStorage,
     addedRelations: string[],
+    options: StubOptions,
   ): void {
     this.parseColumns(stub, entity, metadataStorage);
-    this.parseRelations(stub, entity, metadataStorage, addedRelations);
+
+    if (options.deep) {
+      this.parseRelations(stub, entity, metadataStorage, addedRelations, options);
+    }
   }
 
   private parseColumns<T extends object>(stub: T, entity: ObjectType<T>, metadataStorage: MetadataArgsStorage): void {
@@ -43,6 +47,7 @@ export class Parser extends Singleton {
     entity: ObjectType<T>,
     metadataStorage: MetadataArgsStorage,
     addedRelations: string[],
+    options: StubOptions,
   ): void {
     const relations = metadataStorage.filterRelations(entity);
     const columns = metadataStorage.filterColumns(entity);
@@ -77,6 +82,7 @@ export class Parser extends Singleton {
         entity.name,
         primaryColumns,
         stub,
+        options,
       ] as const;
 
       Reflect.set(
@@ -141,6 +147,7 @@ export class Parser extends Singleton {
     externalEntityName: string,
     externalPrimaryColumns: ColumnMetadataArgs[],
     stub: T,
+    options: StubOptions,
   ): T {
     const relation = new constructor();
     const parent = getParentClass(constructor);
@@ -149,13 +156,13 @@ export class Parser extends Singleton {
     const parentRelations: RelationMetadataArgs[] = [];
 
     if (parent) {
-      this.parseMetadata(relation, parent, metadataStorage, addedRelations);
+      this.parseMetadata(relation, parent, metadataStorage, addedRelations, options);
 
       relationColumns.push(...metadataStorage.filterColumns(parent));
       parentRelations.push(...metadataStorage.filterRelations(parent));
     }
 
-    this.parseMetadata(relation, constructor, metadataStorage, addedRelations);
+    this.parseMetadata(relation, constructor, metadataStorage, addedRelations, options);
 
     if (parent) {
       parentRelations.forEach((relationArgs) => {

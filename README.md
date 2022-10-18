@@ -175,6 +175,14 @@ Foreign keys will be mapped to an entity if it's possible.
 
 > Note that circular dependencies will be omitted, and entities won't be generated twice.
 
+A large number of elements in the array makes the generation slower. To improve performance you can pass `deep: false` in the options, this will disable all deep generation for stubs, e.g.:
+
+```typescript
+const stub = new Stub().createMany(MyEntity, 536, {
+  deep: false,
+});
+```
+
 ## Generator overriding
 
 You may override a stub generator for specific types, e.g. for `string`. You should create a new class implementing `StubGenerator` interface and pass it to `Stub`:
@@ -203,6 +211,7 @@ const stub: MyEntity = {
 
 # Todos
 
+- "level" option for deep generation
 - Tests
 - Overriding by column type
 - Generating PostgreSQL arrays, JSONs

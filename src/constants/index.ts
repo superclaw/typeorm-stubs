@@ -5,3 +5,4 @@ export * from './stub-generator-methods.const';
 export * from './min-words-count.const';
 export * from './max-words-count.const';
 export * from './array-relation-type.const';
+export * from './default-stub-options.const';
