@@ -21,14 +21,19 @@ export class Parser extends Singleton {
     addedRelations: string[],
     options: StubOptions,
   ): void {
-    this.parseColumns(stub, entity, metadataStorage);
+    this.parseColumns(stub, entity, metadataStorage, options);
 
     if (options.deep) {
       this.parseRelations(stub, entity, metadataStorage, addedRelations, options);
     }
   }
 
-  private parseColumns<T extends object>(stub: T, entity: ObjectType<T>, metadataStorage: MetadataArgsStorage): void {
+  private parseColumns<T extends object>(
+    stub: T,
+    entity: ObjectType<T>,
+    metadataStorage: MetadataArgsStorage,
+    options: StubOptions,
+  ): void {
     const columns = metadataStorage.filterColumns(entity);
 
     for (const column of columns) {
@@ -38,7 +43,7 @@ export class Parser extends Singleton {
 
       const designType = this.getDesignType(entity.prototype, column.propertyName);
 
-      Reflect.set(stub, column.propertyName, this.getValueByType(column, designType));
+      Reflect.set(stub, column.propertyName, this.getValueByType(column, designType, options));
     }
   }
 
@@ -351,7 +356,14 @@ export class Parser extends Singleton {
     return null;
   }
 
-  private getValueByType(column: ColumnMetadataArgs, designType: Function): ColumnValue | ColumnValue[] {
+  private getValueByType(
+    column: ColumnMetadataArgs,
+    designType: Function,
+    options: StubOptions,
+  ): ColumnValue | ColumnValue[] {
+    if (column.options.nullable && options.nullDefaults) {
+      return null;
+    }
     switch (column.mode) {
       case 'createDate':
       case 'updateDate':
