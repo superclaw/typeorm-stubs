@@ -14,7 +14,7 @@
 
 - Added `README.md` to npm page.
 
-# 1.2.0 (2022-06-13)
+# 1.2.0 (2023-06-13)
 
 ### Features
 
