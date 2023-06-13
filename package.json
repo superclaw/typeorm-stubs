@@ -1,6 +1,6 @@
 {
   "name": "typeorm-stubs",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Stubs generator for Typeorm entities",
   "main": "index.js",
   "scripts": {
