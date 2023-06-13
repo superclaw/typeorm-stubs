@@ -7,6 +7,7 @@
 - [Usage](#usage)
   - [Simple usage](#simple-usage)
   - [Deep generation](#deep-generation)
+  - [Null defaults](#null-defaults)
   - [Generator overriding](#generator-overriding)
 - [Todos](#todos)
 
@@ -181,6 +182,49 @@ A large number of elements in the array makes the generation slower. To improve 
 const stub = new Stub().createMany(MyEntity, 536, {
   deep: false,
 });
+```
+
+## Null defaults
+
+By passing `nullDefaults: true` in the options, the stub will return `null` for any column that is flagged as nullable, e.g. given the entity:
+
+```typescript
+@Entity()
+export class MyEntity {
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;
+
+  @CreateDateColumn()
+  public createdAt: Date;
+  
+  @Column({ type: 'varchar', nullable: false })
+  public name: string;
+  
+  @Column({ type: 'integer', nullable: true })
+  public index: number;
+  
+  @Column({ type: 'boolean', nullable: true })
+  public isMain: boolean;
+  
+}
+```
+
+Then calling:
+
+```typescript
+const stubs = new Stub().createOne(MyEntity, { nullDefaults: true });
+```
+
+Will give:
+
+```typescript
+const stub: MyEntity = {
+  id: '125a1c28-2938-4996-95f0-d768cbc3c15e',
+  createdAt: new Date('2022-10-09T04:43:05.976Z'),
+  name: 'Proin interdum adipiscing vel tortor.',
+  index: null,
+  isMain: null
+}
 ```
 
 ## Generator overriding
