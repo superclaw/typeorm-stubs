@@ -13,3 +13,9 @@
 ### Features
 
 - Added `README.md` to npm page.
+
+# 1.2.0 (2022-06-13)
+
+### Features
+
+- `nullDefaults` option ([7c7a066](https://github.com/superclaw/typeorm-stubs/pull/2/commits/7c7a06694db3473ebba2ef5ec240905fd8c788d6))
