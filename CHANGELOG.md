@@ -19,3 +19,9 @@
 ### Features
 
 - `nullDefaults` option ([7c7a066](https://github.com/superclaw/typeorm-stubs/pull/2/commits/7c7a06694db3473ebba2ef5ec240905fd8c788d6))
+
+# 1.2.1 (2023-06-13)
+
+### Bugfixes
+
+- Fixed typo in `CHANGELOG.md` ([7344d92](https://github.com/superclaw/typeorm-stubs/commit/7344d926c4cfb52754de17410be5bb0d1e88b155))
